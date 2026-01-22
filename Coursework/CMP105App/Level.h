@@ -16,4 +16,7 @@ private:
 
 	// Default variables for level class.
 	
+	//Player
+
+	sf::CircleShape m_player;
 };
