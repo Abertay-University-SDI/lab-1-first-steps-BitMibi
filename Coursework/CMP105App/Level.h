@@ -10,6 +10,7 @@ public:
 	void handleInput(float dt) override;
 	void update(float dt);
 	void render();
+	void spawnFood();
 
 private:
 	// Default functions for rendering to the screen.
@@ -38,5 +39,11 @@ private:
 	//Food mmmm yummy food drools like homer simpson
 
 	sf::CircleShape m_food;
+
+
+	//Game Over and points
+	bool is_GameOver = false;
+	int m_player_score = 0;
+	float m_timer = 0.f;
 
 };

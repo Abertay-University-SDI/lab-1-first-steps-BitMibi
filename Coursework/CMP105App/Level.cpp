@@ -13,9 +13,13 @@ Level::Level(sf::RenderWindow& hwnd, Input& in) :
 	m_player.setFillColor(sf::Color::Magenta);
 	m_player.setPosition({ m_window.getSize().x / 2.f, m_window.getSize().y / 2.f });
 
-	//Food mmm food starts to drool like the yellow funy man
+	//Food mmmmm food starts to drool like the yellow funy man
 
 	m_food.setRadius(5);
+	m_food.setFillColor(sf::Color::Red);
+	spawnFood();
+
+	
 }
 
 // handle user input
@@ -49,9 +53,29 @@ void Level::handleInput(float dt)
 
 }
 
+
+void Level::spawnFood() {
+	
+	float x = rand() % m_window.getSize().x;
+	float y = rand() % m_window.getSize().y;
+
+	m_food.setPosition({ x, y});
+}
+
+
 // Update game objects
 void Level::update(float dt)
 {
+	if (is_GameOver) {
+		return;
+		
+		
+	}
+	//Timer 
+
+	 m_timer += dt;
+
+	//Player Input
 	switch (m_direction) {
 	case RIGHT: m_player.move({ m_player_speed * dt, 0.f }); break;
 	case LEFT: m_player.move({ (-m_player_speed * dt), 0.f}); break;
@@ -62,19 +86,51 @@ void Level::update(float dt)
 
 	//Checks x position
 	if (m_player.getPosition().x > m_window.getSize().x) {
-		m_player.setPosition({ m_window.getSize().x / 2.f, m_window.getSize().y / 2.f });
+		
+		is_GameOver = true;
+		std::cout << "GAME OVER";
+		std::cout << "\nFinal Score: " << m_player_score;
+		std::cout << "\nTime elapsed: " << m_timer << " seconds\n";
 	}
 	else if (m_player.getPosition().x < 0.f) {
-		m_player.setPosition({ m_window.getSize().x / 2.f, m_window.getSize().y / 2.f });
+		
+		is_GameOver = true;
+		std::cout << "GAME OVER";
+		std::cout << "\nFinal Score: " << m_player_score;
+		std::cout << "\nTime elapsed: " << m_timer << " seconds\n";
 	}
 
 	//Checks y position
 	if (m_player.getPosition().y > m_window.getSize().y) {
-		m_player.setPosition({ m_window.getSize().x / 2.f, m_window.getSize().y / 2.f });
+		
+		is_GameOver = true;
+		std::cout << "GAME OVER";
+		std::cout << "\nFinal Score: " << m_player_score;
+		std::cout << "\nTime elapsed: " << m_timer << " seconds\n";
 	}
 	else if (m_player.getPosition().y < 0.f) {
-		m_player.setPosition({ m_window.getSize().x / 2.f, m_window.getSize().y / 2.f });
+		
+		is_GameOver = true;
+		std::cout << "GAME OVER";
+		std::cout << "\nFinal Score: " << m_player_score;
+		std::cout << "\nTime elapsed: " << m_timer << " seconds\n";
 	}
+
+
+	//Food collision
+	float x_dist = (m_player.getPosition().x + m_player.getRadius()) - (m_food.getPosition().x + m_food.getRadius());
+	float y_dist = (m_player.getPosition().y + m_player.getRadius()) - (m_food.getPosition().y + m_food.getRadius());
+
+	float squared_distance = (x_dist * x_dist) + (y_dist * y_dist);
+	float radii_sum = m_player.getRadius() + m_food.getRadius();
+
+	if (squared_distance < radii_sum * radii_sum) {
+		spawnFood();
+		m_player_score += 1;
+		m_player_speed *= 1.1f;
+	}
+
+	
 }
 
 // Render level
@@ -83,6 +139,8 @@ void Level::render()
 	beginDraw();
 
 	m_window.draw(m_player);
+
+	m_window.draw(m_food);
 
 	endDraw();
 }
