@@ -16,7 +16,27 @@ private:
 
 	// Default variables for level class.
 	
+
 	//Player
 
 	sf::CircleShape m_player;
+
+	float m_player_speed = 200;
+
+	//Keys Pressed
+
+	enum Direction
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	};
+
+	Direction m_direction;
+
+	//Food mmmm yummy food drools like homer simpson
+
+	sf::CircleShape m_food;
+
 };
